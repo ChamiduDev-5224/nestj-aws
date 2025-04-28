@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -20,6 +21,7 @@ export class TasksController {
   getAllTasks(): { taskData: taskModel[]; status: number } {
     return this.taskservice.getAllTasks();
   }
+
   @UsePipes(ValidationPipe)
   @Post()
   createTask(@Body() createTaskDt: createTaskDto): {
@@ -30,9 +32,13 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getTaskById(@Param('id') id: string): { tskmdl?: taskModel; status: number } {
+  getTaskById(@Param('id', ParseIntPipe) id: string): {
+    tskmdl?: taskModel;
+    status: number;
+  } {
     return this.taskservice.getTaskById(id);
   }
+
   @Get('/delete/:id')
   deactiveTaskById(@Param('id') id: string): { status: number } {
     return this.taskservice.deactiveTaskById(id);
